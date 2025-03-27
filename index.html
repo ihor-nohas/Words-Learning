@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn English Words</title>
+    <style>
+    body {
+    	background-color: black;
+    }
+       button {
+        display: block;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin: 300px auto;
+        width: 100px;
+        height: 50px;;
+       }
+    </style>
+</head>
+<body>    
+    <script src="words.js"></script>
+    <script>    
+		const n = 20; //скільки карток показати при одній грі
+		let bl = false; //показати англійську і відповідати українською чи навпаки
+        let index = n;
+        let correctAnswers = 0, incorrectAnswers = 0;
+        let stringWords = inputString.replace(/\t/g, ";").replace(/\n/g, "").replace(/\.\.\./g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\!/g, "");
+        let words = stringWords.split (';');
+        let word = [], word1 = [];
+        let translate = [], translate1 = [];
+        let recommend = "";
+        for (let i=0; i<words.length; i++) {
+                if (i % 2 == 0) {
+                    word1.push(words[i]);
+                } else {
+                    translate1.push(words[i]);
+                }
+            }
+            word = word1.filter(item => item);
+            translate = translate1.filter(item => item);         
+
+        function capitalizeFirstLetter (string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        for (let i=0; i< word.length; i++) {
+            word [i] = word [i].toLowerCase();
+            word [i] = capitalizeFirstLetter (word [i]);
+            translate [i] = translate [i].toLowerCase();
+            translate [i] = capitalizeFirstLetter (translate [i]);
+        }
+        function Play () {  
+            index--;
+            let rand = 0 + Math.random() * (word.length - 0);
+            let j = Math.floor(rand);
+			let answer = '';			
+            
+			if (bl === true) {
+				answer = prompt (`"${word[j]}" - Enter translete of this word`);
+			} else {
+				answer = prompt (`"${translate[j]}" - Enter translete of this word`);
+			}
+            
+			if (answer != undefined) {
+                answer = answer.toLowerCase();
+                answer = capitalizeFirstLetter (answer);
+            }
+			if (bl === true) {
+				if (answer == translate[j]) {
+					alert (`Excellent 😃
+                    "${word[j]}" - "${translate[j]}"`);
+                    correctAnswers++;
+				} else {
+					alert (`Wrong 😲
+                    "${word[j]}" - "${translate[j]}"`);
+                    incorrectAnswers++;
+				}
+			} else {
+				if (answer == word[j]) {
+					alert (`Excellent 😃
+                    "${word[j]}" - "${translate[j]}"`);
+                    correctAnswers++;
+				} else {
+					alert (`Wrong 😲
+                    "${word[j]}" - "${translate[j]}"`);
+                    incorrectAnswers++;
+				}
+			}
+            if (index > 0) {
+                Play();
+            } else 
+            {
+                let countPlay = localStorage.getItem("countPlay"); //countPlay - скільки разів вчив цей набір слів
+                if (countPlay == "1")
+                {
+                    localStorage.setItem("countPlay", "2");
+                }
+                else if (countPlay == "2")
+                {
+                    localStorage.setItem("countPlay", "0"); 
+                    recommend = " Recommendation: Add or change words in words.js for the next session"; 
+                }
+                else
+                {
+                    localStorage.setItem("countPlay", "1");
+                    recommend = "";
+                }
+                alert (`You answered right on ${correctAnswers} questions 💪
+                    And you made ${incorrectAnswers} mistakes 🛑
+                    Well Done!!! 👍 
+                    ${recommend}`);
+                correctAnswers = 0;
+                incorrectAnswers = 0;
+                index = n;
+            }
+        }
+    </script>
+    <button onclick="Play()">To Learn &#129351</button>
+</body>
+</html>
